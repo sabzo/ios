@@ -102,7 +102,8 @@ class PhotosViewController: UIViewController, UITableViewDataSource, UITableView
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if (!isMoreDataLoading) {
             let scrollViewContentHeight = postTable.contentSize.height
-            let scrollOffsetThreshold = scrollViewContentHeight - postTable.bounds.size.height
+            // Threshhold: The point the user has scrolled past half of the content in the TableView
+            let scrollOffsetThreshold = scrollViewContentHeight / 2
             
             // When the user has scrolled past the threshold, start requesting
             if(scrollView.contentOffset.y > scrollOffsetThreshold && postTable.isDragging) {
