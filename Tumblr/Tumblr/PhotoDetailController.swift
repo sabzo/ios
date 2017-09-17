@@ -13,6 +13,7 @@ private let reuseIdentifier = "Cell"
 class PhotoDetailController: UIViewController {
     @IBOutlet weak var ivPhotoDetail: UIImageView!
     
+    @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var lblPhotoDetail: UILabel!
     var post: Post? = nil
 
@@ -20,6 +21,10 @@ class PhotoDetailController: UIViewController {
         super.viewDidLoad()
         ivPhotoDetail.setImageWith(post!.url)
         lblPhotoDetail.text = post!.caption
+        
+        let contentWidth = scrollView.bounds.width
+        let contentHeight = scrollView.bounds.height
+        scrollView.contentSize = CGSize(width: contentWidth, height: contentHeight)
 
     }
 
