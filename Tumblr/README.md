@@ -15,15 +15,11 @@ The following **required** functionality is completed:
 - [ ] Add a search bar.
 
 
-The following **additional** features are implemented:
-
-- [ ] List anything else that you can get done to improve the app functionality!
-
 ## Video Walkthrough
 
 Here's a walkthrough of implemented user stories:
 
-<img src='https://imgur.com/a/l9OQk' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='https://i.imgur.com/mhB7Pyx.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
