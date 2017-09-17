@@ -8,10 +8,13 @@
 import UIKit
 import AFNetworking
 
-class PhotosViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class PhotosViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate {
     @IBOutlet weak var postTable: UITableView!
 
     var posts: [Post] = []
+    var isMoreDataLoading = false
+    var page = 0
+    let totalPostsPerPage = 20
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,22 +24,8 @@ class PhotosViewController: UIViewController, UITableViewDataSource, UITableView
         
         
         let url = URL(string:"https://api.tumblr.com/v2/blog/humansofnewyork.tumblr.com/posts/photo?api_key=Q6vHoaVm5L1u2ZAW1fqv3Jw48gFzYVg9P0vH0VHl3GVy6quoGV")
-        let request = URLRequest(url: url!)
-        let session = URLSession(
-            configuration: URLSessionConfiguration.default,
-            delegate:nil,
-            delegateQueue:OperationQueue.main
-        )
+        loadData(url: url!, initial: true)
         
-        let task: URLSessionDataTask = session.dataTask(
-            with: request as URLRequest,
-            completionHandler: { (data, response, error) in
-                if let data = data {
-                    self.posts = Post.getPostsFromJsonObject(data: data)
-                    self.postTable.reloadData()
-                }
-        });
-        task.resume()
     
         postTable.rowHeight = 240
         
@@ -79,6 +68,51 @@ class PhotosViewController: UIViewController, UITableViewDataSource, UITableView
         
         let vc: PhotoDetailController = segue.destination as! PhotoDetailController
         vc.post = post
+    }
+    
+    func loadData(url: URL,  initial:Bool) {
+        let request = URLRequest(url: url)
+        let session = URLSession(
+            configuration: URLSessionConfiguration.default,
+            delegate:nil,
+            delegateQueue:OperationQueue.main
+        )
+        
+        let task: URLSessionDataTask = session.dataTask(
+            with: request as URLRequest,
+            completionHandler: { (data, response, error) in
+                if let data = data {
+                    if initial {
+                        self.posts = Post.getPostsFromJsonObject(data: data)
+                    } else {
+                        for post in Post.getPostsFromJsonObject(data: data) {
+                            self.posts.append(post)
+                        }
+                        //self.posts + Post.getPostsFromJsonObject(data: data)
+                    }
+            
+                }
+                self.isMoreDataLoading = false
+                self.postTable.reloadData()
+        });
+        task.resume()
+        
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if (!isMoreDataLoading) {
+            let scrollViewContentHeight = postTable.contentSize.height
+            let scrollOffsetThreshold = scrollViewContentHeight - postTable.bounds.size.height
+            
+            // When the user has scrolled past the threshold, start requesting
+            if(scrollView.contentOffset.y > scrollOffsetThreshold && postTable.isDragging) {
+                isMoreDataLoading = true
+                page += 1
+                let offset = page * totalPostsPerPage
+                let url = URL(string:"https://api.tumblr.com/v2/blog/humansofnewyork.tumblr.com/posts/photo?api_key=Q6vHoaVm5L1u2ZAW1fqv3Jw48gFzYVg9P0vH0VHl3GVy6quoGV&offset=\(offset)")
+                loadData(url: url!, initial: false)
+            }
+        }
     }
     
 }
