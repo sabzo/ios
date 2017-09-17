@@ -18,8 +18,11 @@ The following **required** functionality is completed:
 ## Video Walkthrough
 
 Here's a walkthrough of implemented user stories:
+[Link to walkthrough] (https://i.imgur.com/mhB7Pyx.gif)
 
-![Video Walkthrough](https://i.imgur.com/mhB7Pyx.gif)
+The following link may not show properly on Github for some reason
+<img src='https://i.imgur.com/mhB7Pyx.gif' title='Video Walkthrough' width='' alt='Video Walkthrough embedded in README' />
+
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
